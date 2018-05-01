@@ -7,10 +7,10 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-item>
-    <p>With fake news on the rise, it's important you be able to spot it.</p>
-    <p>Fake News Trainer pulls headlines from the <a href="http://www.reddit.com/r/TheOnion">/r/TheOnion</a> (bizarre fake news) and <a href="http://www.reddit.com/r/nottheonion">/r/NotTheOnion</a> (surprisingly not fake bizarre news) subreddits.</p>
-    <p>Can you tell them apart?</p>
-  </ion-item>
-  <button ion-button>Get started</button>
+  <p>With fake news on the rise, it's important you be able to spot it.</p>
+  <p>Fake News Trainer pulls headlines from the <a href="http://www.reddit.com/r/TheOnion">/r/TheOnion</a> (bizarre fake news) and <a href="http://www.reddit.com/r/nottheonion">/r/NotTheOnion</a> (surprisingly not fake bizarre news) subreddits.</p>
+  <p>Can you tell them apart?</p>
+  <ion-item color="danger">Warning: Headlines may be innapropriate!</ion-item>
+  
+  <button ion-button (click)="openSettings()">Get started</button>
 </ion-content>
