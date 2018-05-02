@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RedditProvider } from '../../providers/reddit/reddit';
+import { ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the GamePage page.
@@ -22,9 +23,14 @@ export class GamePage {
   fakeHeadlineNum: number;
   realHeadlines: string[]=[];
   fakeHeadlines: string[]=[];
-  headlinesSet: boolean = false;
+  otherHeadlinesReady: boolean = false;
+  numGuessed: number = 0;
+  numCorrect: number = 0;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private rp:RedditProvider) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private rp:RedditProvider,
+              private toastCtrl: ToastController) {
     this.questionBankSize = navParams.get("questionBankSize");
     this.sortBy = navParams.get("sortBy");
   }
@@ -37,7 +43,8 @@ export class GamePage {
     this.rp.GetRealHeadlines().subscribe(data =>
     {
         for (var index in data["data"]["children"]) {
-          var titleData = data["data"]["children"][index]["data"]["title"];
+          let titleData: string = data["data"]["children"][index]["data"]["title"];
+          titleData = titleData.charAt(0) + titleData.slice(1).toLowerCase();
           console.log("titleData: " + titleData);
           this.realHeadlines.push(titleData);
         }
@@ -46,16 +53,19 @@ export class GamePage {
           console.log("Real headline: " + headline);
         }
         
-        if (!this.headlinesSet) {
+        if (this.otherHeadlinesReady) {
           this.setNewHeadlines();
-          this.headlinesSet = true;
+        }
+        else {
+          this.otherHeadlinesReady = true;
         }
     })
 
     this.rp.GetFakeHeadlines().subscribe(data =>
     {
       for (var index in data["data"]["children"]) {
-        var titleData = data["data"]["children"][index]["data"]["title"];
+        let titleData: string = data["data"]["children"][index]["data"]["title"];
+        titleData = titleData.charAt(0) + titleData.slice(1).toLowerCase();
         console.log("titleData: " + titleData);
         this.fakeHeadlines.push(titleData);
       }
@@ -64,9 +74,11 @@ export class GamePage {
         console.log("Fake headline: " + headline);
       }
 
-      if (!this.headlinesSet) {
+      if (this.otherHeadlinesReady) {
         this.setNewHeadlines();
-        this.headlinesSet = true;
+      }
+      else {
+        this.otherHeadlinesReady = true;
       }
     })
   }
@@ -90,12 +102,31 @@ export class GamePage {
   }
 
   getNextRealHeadline(): string {
-    return this.fakeHeadlines[Math.floor(Math.random() * this.realHeadlines.length)];
+    return this.realHeadlines[Math.floor(Math.random() * this.realHeadlines.length)];
   }
 
   headlineClicked(headlineNum: number) {
     console.log("Headline " + headlineNum + " clicked.");
+    console.log("Fake headline num: " + this.fakeHeadlineNum)
+
+
+    let correct: boolean = (headlineNum == this.fakeHeadlineNum);
+
+    this.numGuessed++;
+    if (correct) this.numCorrect++;
+    let guessPercentage = (this.numCorrect / this.numGuessed) * 100;
+
+    let message = (correct ? "Correct!" : "Incorrect!") + " Correct guess percentage: " + guessPercentage.toFixed(2) + "%";
+
     this.setNewHeadlines();
+
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top'
+    });
+
+    toast.present();
   }
 
 }
