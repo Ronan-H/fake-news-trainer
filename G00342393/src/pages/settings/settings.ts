@@ -4,10 +4,10 @@ import { Storage } from '@ionic/storage';
 import { GamePage } from '../game/game';
 
 /**
- * Generated class for the SettingsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * A couple of settings the user can set for when the Reddit
+ * API is called. The user can pick how many questions should be
+ * used in the bank of questions, and which sort method to use
+ * from Reddit (i.e. new (sort by time), top (sort by vote popularity)...)
  */
 
 @IonicPage()
@@ -16,6 +16,7 @@ import { GamePage } from '../game/game';
   templateUrl: 'settings.html',
 })
 export class SettingsPage {
+  // variables to store settings used when Reddit API is called
   questionBankSize: number;
   sortBy: string;
 
@@ -45,11 +46,12 @@ export class SettingsPage {
   }
 
   saveSettingsAndBegin() {
-    console.log("Question bank size: " + this.questionBankSize);
-    console.log("Sort By: " + this.sortBy);
+    // save settings to storage
     this.storage.set("QuestionBankSize", this.questionBankSize);
     this.storage.set("SortBy", this.sortBy);
 
+    // push the game page onto the navigation stack
+    // also pass the API variables to it, to be later passed to the provider
     this.navCtrl.push(GamePage, {questionBankSize: this.questionBankSize, sortBy: this.sortBy});
   }
 
