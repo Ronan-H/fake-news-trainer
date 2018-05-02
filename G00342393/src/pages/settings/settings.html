@@ -14,15 +14,15 @@
 
 
 <ion-content padding>
+  <ion-label color="primary">Question bank size (recommended: 100)</ion-label>
   <ion-item>
-    <ion-label color="primary">Question bank size:</ion-label>
     <ion-input placeholder="Size" [(ngModel)]="questionBankSize"></ion-input>
   </ion-item>
 
   <ion-list radio-group [(ngModel)]="sortBy">
-    <ion-label color="primary">Sort by:</ion-label>
+    <ion-label color="primary">Get questions from (Reddit filter):</ion-label>
     <ion-item>
-      <ion-label>Top</ion-label>
+      <ion-label>Top (pick this if you're not sure)</ion-label>
       <ion-radio value="top" checked></ion-radio>
     </ion-item>
     <ion-item>

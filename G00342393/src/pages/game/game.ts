@@ -17,10 +17,12 @@ import { RedditProvider } from '../../providers/reddit/reddit';
 export class GamePage {
   questionBankSize: number;
   sortBy: string;
-  headline1: string = "Alexa exec Charlie Kindel leaves Amazon to spend more time with his smart home";
-  headline2: string = "Report: Rest Of Pottery Class Knows Each Other From Previous Pottery Class ";
+  headline1: string = "Loading...";
+  headline2: string = "Loading...";
+  fakeHeadlineNum: number;
   realHeadlines: string[]=[];
   fakeHeadlines: string[]=[];
+  headlinesSet: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private rp:RedditProvider) {
     this.questionBankSize = navParams.get("questionBankSize");
@@ -44,6 +46,10 @@ export class GamePage {
           console.log("Real headline: " + headline);
         }
         
+        if (!this.headlinesSet) {
+          this.setNewHeadlines();
+          this.headlinesSet = true;
+        }
     })
 
     this.rp.GetFakeHeadlines().subscribe(data =>
@@ -57,7 +63,39 @@ export class GamePage {
       for (var headline of this.fakeHeadlines) {
         console.log("Fake headline: " + headline);
       }
+
+      if (!this.headlinesSet) {
+        this.setNewHeadlines();
+        this.headlinesSet = true;
+      }
     })
+  }
+
+  setNewHeadlines() {
+    this.fakeHeadlineNum = Math.floor(Math.random() * 2) + 1;
+
+    if (this.fakeHeadlineNum == 1) {
+      this.headline1 = this.getNextFakeHeadline();
+      this.headline2 = this.getNextRealHeadline();
+    }
+    else {
+      // fakeHeadlineNum is 2
+      this.headline1 = this.getNextRealHeadline();
+      this.headline2 = this.getNextFakeHeadline();
+    }
+  }
+
+  getNextFakeHeadline(): string {
+    return this.fakeHeadlines[Math.floor(Math.random() * this.fakeHeadlines.length)];
+  }
+
+  getNextRealHeadline(): string {
+    return this.fakeHeadlines[Math.floor(Math.random() * this.realHeadlines.length)];
+  }
+
+  headlineClicked(headlineNum: number) {
+    console.log("Headline " + headlineNum + " clicked.");
+    this.setNewHeadlines();
   }
 
 }

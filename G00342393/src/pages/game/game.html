@@ -19,11 +19,11 @@
   </ion-item>
 
   <ion-item-divider>
-      <ion-item>
-          <h2><a>{{ headline1 }}</a></h2>
+      <ion-item text-wrap>
+          <h2 (click)="headlineClicked(1)"><a>{{ headline1 }}</a></h2>
       </ion-item>
-      <ion-item>
-          <h2><a>{{ headline2 }}</a></h2>
+      <ion-item text-wrap>
+          <h2><a (click)="headlineClicked(2)">{{ headline2 }}</a></h2>
       </ion-item>
   </ion-item-divider>
 </ion-content>
