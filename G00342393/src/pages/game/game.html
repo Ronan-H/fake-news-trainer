@@ -16,15 +16,18 @@
 <ion-content padding>
   <ion-item>
       <ion-title>Which of these is fake?</ion-title>
+      <ion-title>(tap one)</ion-title>
   </ion-item>
 
   <!-- Two clickable headlines, one fake one real. Loaded in from Reddit's API. -->
   <ion-item-divider>
-      <ion-item text-wrap>
-          <h2 (click)="headlineClicked(1)"><a>{{ headline1 }}</a></h2>
+      <ion-item text-wrap class="headlineElements" (click)="headlineClicked(1)">
+          <img class="thumb" [(src)]="headline1thumb" width=175 />
+          <h2>{{ headline1 }}</h2>
       </ion-item>
-      <ion-item text-wrap>
-          <h2><a (click)="headlineClicked(2)">{{ headline2 }}</a></h2>
+      <ion-item text-wrap class="headlineElements" (click)="headlineClicked(2)">
+          <img class="thumb" [(src)]="headline2thumb" width=175 />
+          <h2>{{ headline2 }}</h2>
       </ion-item>
   </ion-item-divider>
 </ion-content>
