@@ -12,6 +12,9 @@ import { IonicStorageModule } from '@ionic/storage';
 import { HttpClientModule } from '@angular/common/http';
 import { RedditProvider } from '../providers/reddit/reddit';
 
+// Cordova sound plugin
+import { NativeAudio } from '@ionic-native/native-audio';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -36,7 +39,8 @@ import { RedditProvider } from '../providers/reddit/reddit';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RedditProvider
+    RedditProvider,
+    NativeAudio
   ]
 })
 export class AppModule {}

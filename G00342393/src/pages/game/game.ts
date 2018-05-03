@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RedditProvider } from '../../providers/reddit/reddit';
 import { ToastController } from 'ionic-angular';
+import { NativeAudio } from '@ionic-native/native-audio';
+import { Platform } from 'ionic-angular';
 
 /**
  * This is where the game where the user can guess which headline
@@ -37,7 +39,9 @@ export class GamePage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private rp:RedditProvider,
-              private toastCtrl: ToastController) {
+              private toastCtrl: ToastController,
+              private nativeAudio: NativeAudio,
+              public plt: Platform) {
     // retrieve the variables from when this was pushed onto the nav stack
     this.questionBankSize = navParams.get("questionBankSize");
     this.sortBy = navParams.get("sortBy");
@@ -45,7 +49,6 @@ export class GamePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad GamePage');
-
     // pass settings over to the provider
     this.rp.setSettings(this.questionBankSize, this.sortBy);
 
@@ -89,6 +92,12 @@ export class GamePage {
       else {
         this.otherHeadlinesReady = true;
       }
+    })
+
+    // load sound effects for correct/incorrect ("ding"/"buzz")
+    this.plt.ready().then((readySource) => {
+      this.nativeAudio.preloadSimple('ding', 'assets/sfx/ding.mp3').then(this.onAudioLoadSuccess, this.onAudioLoadError);
+      this.nativeAudio.preloadSimple('buzz', 'assets/sfx/buzz.mp3').then(this.onAudioLoadSuccess, this.onAudioLoadError);
     })
   }
 
@@ -141,8 +150,29 @@ export class GamePage {
 
     toast.present();
 
+    // play relevant sound effect (ding/buzz)
+    this.plt.ready().then((readySource) => {
+      this.nativeAudio.play(correct ? "ding" : "buzz").then(this.onAudioClipPlaySuccess, this.onAudioClipPlayError);
+    })
+
     // load in new headlines for the user
     this.setNewHeadlines();
   }
 
+  // below are functions called on success/error when loading/playing audio clips
+  onAudioLoadSuccess() {
+    console.log("Successfully loaded audio clip.");
+  }
+
+  onAudioLoadError() {
+    console.log("Error when loading audio clip.");
+  }
+
+  onAudioClipPlaySuccess() {
+    console.log("Successfully played audio clip.");
+  }
+
+  onAudioClipPlayError() {
+    console.log("Error when playing audio clip.");
+  }
 }
