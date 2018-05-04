@@ -23,8 +23,8 @@ export class GamePage {
   headline1: string = "Loading...";
   headline2: string = "Loading...";
   // two thumbnail urls for the above headlines
-  headline1thumb: string = "";
-  headline2thumb: string = "";
+  headline1thumb: string = "https://image.flaticon.com/icons/svg/0/838.svg";
+  headline2thumb: string = "https://image.flaticon.com/icons/svg/0/838.svg";
   // either 1 or 2, indicating which headline is the fake one
   fakeHeadlineNum: number;
   // list of real headlines, pulled from Reddit
@@ -145,6 +145,11 @@ export class GamePage {
 
   // called when a headlines is clicked. the headline number, 1 or 2, is passed in.
   headlineClicked(headlineNum: number) {
+    if (this.headline1 === "Loading...") {
+      // user clicked a headline before they were loaded in; do nothing
+      return;
+    }
+
     // true if the user's guess was correct
     let correct: boolean = (headlineNum == this.fakeHeadlineNum);
 

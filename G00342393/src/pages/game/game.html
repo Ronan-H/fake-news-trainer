@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Game</ion-title>
+    <ion-title>Fake News Trainer</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -21,13 +21,23 @@
 
   <!-- Two clickable headlines, one fake one real. Loaded in from Reddit's API. -->
   <ion-item-divider>
+    <ion-list>
       <ion-item text-wrap class="headlineElements" (click)="headlineClicked(1)">
-          <img class="thumb" [(src)]="headline1thumb" width=175 />
-          <h2>{{ headline1 }}</h2>
+          <ion-thumbnail item-start>
+              <img class="thumb" [(src)]="headline1thumb" width=200 />
+          </ion-thumbnail>
+          <h2 class="headlineText">{{ headline1 }}</h2>
       </ion-item>
-      <ion-item text-wrap class="headlineElements" (click)="headlineClicked(2)">
-          <img class="thumb" [(src)]="headline2thumb" width=175 />
-          <h2>{{ headline2 }}</h2>
-      </ion-item>
+    </ion-list>
+
+    
+    <ion-list>
+        <ion-item text-wrap class="headlineElements" (click)="headlineClicked(2)">
+            <ion-thumbnail item-start>
+                <img class="thumb" [(src)]="headline2thumb" width=200 />
+            </ion-thumbnail>
+            <h2 class="headlineText">{{ headline2 }}</h2>
+        </ion-item>
+      </ion-list>
   </ion-item-divider>
 </ion-content>
