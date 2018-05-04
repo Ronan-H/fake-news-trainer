@@ -18,3 +18,8 @@
 .headlineText {
     display: inline-block;
 }
+
+// allow new lines in toast messages
+.toast-message {
+    white-space: pre;
+}

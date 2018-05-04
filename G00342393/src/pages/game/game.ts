@@ -19,6 +19,9 @@ export class GamePage {
   // API settings passed in from settings.ts
   questionBankSize: number;
   sortBy: string;
+  // indexes for the headlines, to be incremented each time
+  fakeHeadlineIndex = 0;
+  realHeadlineIndex = 0;
   // the two headlines to be displayed (updated when user guesses)
   headline1: string = "Loading...";
   headline2: string = "Loading...";
@@ -42,6 +45,7 @@ export class GamePage {
   // from these  a percentage is also calculated
   numGuessed: number = 0;
   numCorrect: number = 0;
+  correctPercentage: string = "x%";
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -112,19 +116,32 @@ export class GamePage {
     })
   }
 
-  // load in 2 new random headlines for the user to guess which is fake
+  // load in 2 new headlines for the user to guess which is fake
   setNewHeadlines() {
+    if (this.fakeHeadlineIndex >= this.fakeHeadlines.length
+     || this.realHeadlineIndex >= this.realHeadlines.length) {
+       // all headlines shown already. go back to the settings page so the
+       // user can get more headlines.
+       this.navCtrl.pop();
+
+      // show a toast message to inform the user
+      let toast = this.toastCtrl.create({
+        message: "All headlines used! You may adjust the settings and tap \"begin\" to keep playing.",
+        duration: 8000,
+        position: 'bottom'
+      });
+
+      toast.present();
+     }
+
     // pick which headline is fake, 1 or 2
     this.fakeHeadlineNum = Math.floor(Math.random() * 2) + 1;
 
-    let fakeHeadlineIndex = Math.floor(Math.random() * this.fakeHeadlines.length);
-    let realHeadlineIndex = Math.floor(Math.random() * this.realHeadlines.length);
+    let fakeHeadline = this.fakeHeadlines[this.fakeHeadlineIndex];
+    let realHeadline = this.realHeadlines[this.realHeadlineIndex];
 
-    let fakeHeadline = this.fakeHeadlines[fakeHeadlineIndex];
-    let realHeadline = this.realHeadlines[realHeadlineIndex];
-
-    let fakeHeadlineThumb = this.fakeHeadlineThumbs[fakeHeadlineIndex];
-    let realHeadlineThumb = this.realHeadlineThumbs[realHeadlineIndex];
+    let fakeHeadlineThumb = this.fakeHeadlineThumbs[this.fakeHeadlineIndex];
+    let realHeadlineThumb = this.realHeadlineThumbs[this.realHeadlineIndex];
     // set the 2 headlines and thumbnails accordingly
     if (this.fakeHeadlineNum == 1) {
       this.headline1 = fakeHeadline;
@@ -141,6 +158,9 @@ export class GamePage {
       this.headline1thumb = realHeadlineThumb;
       this.headline2thumb = fakeHeadlineThumb;
     }
+
+    ++this.fakeHeadlineIndex;
+    ++this.realHeadlineIndex;
   }
 
   // called when a headlines is clicked. the headline number, 1 or 2, is passed in.
@@ -158,13 +178,16 @@ export class GamePage {
     if (correct) this.numCorrect++;
     let guessPercentage = (this.numCorrect / this.numGuessed) * 100;
 
-    // assemble the toast message
-    let message = (correct ? "Correct!" : "Incorrect!") + " Correct guess percentage: " + guessPercentage.toFixed(2) + "%";
+    // update percentage that the user sees
+    this.correctPercentage = guessPercentage.toFixed(2) + "%";
+
+    // prepare the toast message
+    let message = (correct ? "Correct!" : "Incorrect!");
 
     // create and display the toast message
     let toast = this.toastCtrl.create({
       message: message,
-      duration: 3000,
+      duration: 2500,
       position: 'top'
     });
 

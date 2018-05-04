@@ -21,6 +21,8 @@
 
   <!-- Two clickable headlines, one fake one real. Loaded in from Reddit's API. -->
   <ion-item-divider>
+    <h2>Question {{ numGuessed + 1 }} of {{ fakeHeadlines.length }}</h2>
+    <h2>{{ numCorrect }} correct ({{ correctPercentage }})</h2>
     <ion-list>
       <ion-item text-wrap class="headlineElements" (click)="headlineClicked(1)">
           <ion-thumbnail item-start>
